@@ -19,4 +19,6 @@ function preload() {
     game.load.audio('player_death', 'audio/SoundEffects/player_death.wav');
     game.load.audio('blaster', 'audio/SoundEffects/blaster.mp3');
 
+    game.load.bitmapFont('carrier_command', 'fonts/bitmapFonts/carrier_command.png', 'fonts/bitmapFonts/carrier_command.xml');
+
 }

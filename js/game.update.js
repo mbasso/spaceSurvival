@@ -1,5 +1,16 @@
 function update () {
 
+    if (button.restart.isDown)
+    {
+        score = 0;
+        game.state.restart();
+    }
+
+    /*if (button.pause.isDown)
+    {
+        game.paused = !game.paused;
+    }*/
+
     player.body.velocity.x = 0;
 
     if (cursors.left.isDown)
@@ -16,7 +27,7 @@ function update () {
         fireBullet();
     }
 
-    game.physics.arcade.collide(bullets, enemy.sprites, killEnemy, null, this);
+    game.physics.arcade.collide(bullets, enemyConfig.sprites, killEnemy, null, this);
 
     addEnemy();
     moveEnemies();
@@ -27,7 +38,7 @@ function fireBullet () {
 
     if (game.time.time > bulletTime)
     {
-        bullet = bullets.getFirstExists(false);
+        var bullet = bullets.getFirstExists(false);
 
         if (bullet)
         {
@@ -42,31 +53,31 @@ function fireBullet () {
 
 function addEnemy () {
 
-    if (button.addEnemy.isDown || game.time.time > enemy.time)
+    if (button.addEnemy.isDown || game.time.time > enemyConfig.time)
     {
-        var sprite = game.add.sprite(game.rnd.integerInRange(0, enemy.world.x), game.rnd.integerInRange(0, enemy.world.y), enemy.images[game.rnd.integerInRange(0, 5)]);
+        var sprite = game.add.sprite(game.rnd.integerInRange(0, game.width), game.rnd.integerInRange(0, game.height / 3 + 50), enemyConfig.images[game.rnd.integerInRange(0, enemyConfig.images.length -1)]);
         game.physics.enable(sprite, Phaser.Physics.ARCADE);
         sprite.body.collideWorldBounds = false;
         sprite.body.checkCollision.up = false;
         sprite.body.checkCollision.down = true;
-        enemy.sprites.push(sprite);
-        enemy.time = game.time.time + 700;   
+        enemyConfig.sprites.push(sprite);
+        enemyConfig.time = game.time.time + enemyConfig.spawnTime;   
     }
 
 }
 
 function moveEnemies() {
-    if (game.time.time > enemy.time - 700 || !enemy.sprites)
+    if (game.time.time > enemyConfig.time -  enemyConfig.spawnTime || !enemyConfig.sprites)
         return;
 
-    for (i = 0; i < enemy.sprites.length; i++) {
-        if(!enemy.sprites[i].body)
+    for (i = 0; i < enemyConfig.sprites.length; i++) {
+        if(!enemyConfig.sprites[i].body)
             continue;
 
         if(game.rnd.integerInRange(0, 2) == 1)
-            enemy.sprites[i].body.velocity.x = enemy.velocity;
+            enemyConfig.sprites[i].body.velocity.x = enemyConfig.velocity;
         else
-            enemy.sprites[i].body.velocity.x = -enemy.velocity;
+            enemyConfig.sprites[i].body.velocity.x = -enemyConfig.velocity;
     }
 }
 
@@ -74,8 +85,22 @@ function killEnemy (bullet, opposed) {
     bullet.kill();
     opposed.kill();
     audio.alien_death1.play();
+
+    score += 55;
+    texts.score.setText("Score: " + score);
+    //enemyConfig.velocity += 2;
+    enemyConfig.spawnTime -= 5;
 }
 
 function resetBullet (bullet) {
     bullet.kill();
 }
+
+function onGamePaused(){
+    texts.center = game.add.bitmapText(game.world.centerX, game.world.centerY, 'carrier_command','Pause');
+    texts.center.anchor.set(0.5);
+};
+
+function onGameResume(){
+    game.world.remove(texts.center);
+};
