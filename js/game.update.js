@@ -6,10 +6,10 @@ function update () {
         game.state.restart();
     }
 
-    /*if (button.pause.isDown)
+    if (button.pause.isDown)
     {
-        game.paused = !game.paused;
-    }*/
+        game.paused = true;
+    }
 
     player.body.velocity.x = 0;
 
@@ -55,7 +55,7 @@ function addEnemy () {
 
     if (button.addEnemy.isDown || game.time.time > enemyConfig.time)
     {
-        var sprite = game.add.sprite(game.rnd.integerInRange(0, game.width), game.rnd.integerInRange(0, game.height / 3 + 50), enemyConfig.images[game.rnd.integerInRange(0, enemyConfig.images.length -1)]);
+        var sprite = game.add.sprite(game.rnd.integerInRange(0, game.width), game.rnd.integerInRange(25, game.height / 3 + 50), enemyConfig.images[game.rnd.integerInRange(0, enemyConfig.images.length -1)]);
         game.physics.enable(sprite, Phaser.Physics.ARCADE);
         sprite.body.collideWorldBounds = false;
         sprite.body.checkCollision.up = false;
@@ -92,15 +92,24 @@ function killEnemy (bullet, opposed) {
     enemyConfig.spawnTime -= 5;
 }
 
-function resetBullet (bullet) {
+function resetBullet(bullet) {
     bullet.kill();
 }
 
 function onGamePaused(){
-    texts.center = game.add.bitmapText(game.world.centerX, game.world.centerY, 'carrier_command','Pause');
-    texts.center.anchor.set(0.5);
-};
+
+    if(!texts.center){
+        texts.center = game.add.bitmapText(game.world.centerX, game.world.centerY, 'carrier_command','----- Pause -----\n\nClick to continue', 15);
+        texts.center.anchor.set(0.5);
+    }
+
+}
 
 function onGameResume(){
+
+    if(game.paused)
+        return;
+
     game.world.remove(texts.center);
-};
+    texts.center = null;
+}

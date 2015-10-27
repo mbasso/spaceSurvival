@@ -5,9 +5,12 @@ var bulletTime = 0;
 
 var cursors;
 
+var background;
+
 var texts = {
     score: null,
-    center: null
+    center: null,
+    menu: null
 };
 
 var score = 0;
@@ -36,7 +39,9 @@ var enemyConfig = {
 function create() {
 
 	game.physics.startSystem(Phaser.Physics.ARCADE);
-	//game.stage.backgroundColor = '#124184';
+
+	game.stage.backgroundColor = '#182d3b';
+    background = game.add.tileSprite(0, 0, game.world.width, game.world.height, 'starfield');
 
     bullets = game.add.physicsGroup();
     bullets.createMultiple(32, 'bullet', false);
@@ -51,7 +56,7 @@ function create() {
     button.fire = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
     button.addEnemy = game.input.keyboard.addKey(Phaser.Keyboard.F1);
     button.restart = game.input.keyboard.addKey(Phaser.KeyCode.R);
-    //button.pause = game.input.keyboard.addKey(Phaser.KeyCode.P);
+    button.pause = game.input.keyboard.addKey(Phaser.KeyCode.P);
 
     audio.alien_death1 = game.add.audio('alien_death1');
     audio.player_death = game.add.audio('player_death');
@@ -61,10 +66,16 @@ function create() {
     texts.score.inputEnabled = true;
     texts.score.input.enableDrag();
 
-    //game.onPause.add(onGamePaused, this);
+    texts.menu = game.add.bitmapText(game.world.width - 10, 10, 'carrier_command','Menu', 10);
+    texts.menu.anchor.x = 1;
+
+    game.onPause.add(onGamePaused, this);
+    game.onResume.add(onGameResume, this);
     game.onBlur.add(onGamePaused, this);
     game.onFocus.add(onGameResume, this);
-    //game.onResume.add(onGameResume, this);
-    game.paused = false;
+
+    game.input.onDown.add(function(event){
+        game.paused = false;
+    }, self);
 
 }

@@ -12,6 +12,7 @@ function preload() {
     game.load.image('tomato', 'sprites/tomato.png');
     game.load.image('phaser-ship', 'sprites/phaser-ship.png');
     game.load.image('phaser-dude', 'sprites/phaser-dude.png');
+    game.load.image('starfield','misc/starfield.png');
 
     game.load.image('bullet', 'misc/bullet0.png');
 
