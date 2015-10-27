@@ -2,8 +2,7 @@ function update () {
 
     if (button.restart.isDown)
     {
-        score = 0;
-        game.state.restart();
+        restartGame();
     }
 
     if (button.pause.isDown)
@@ -27,7 +26,8 @@ function update () {
         fireBullet();
     }
 
-    game.physics.arcade.collide(bullets, enemyConfig.sprites, killEnemy, null, this);
+    game.physics.arcade.collide(bullets, enemies, killEnemy, null, this);
+    game.physics.arcade.collide(enemyBullets, player, onGameOver, null, this);
 
     addEnemy();
     moveEnemies();
@@ -51,39 +51,52 @@ function fireBullet () {
 
 }
 
+function fireEnemyBullet (enemy) {
+
+    if (game.time.time > enemy.fireTime)
+    {
+        var bullet = enemyBullets.create(enemy.x - 6, enemy.y + 12, 'particle_small');
+
+        if (bullet)
+        {
+            bullet.body.velocity.y = 200;
+            enemy.fireTime = game.time.time + enemyConfig.spawnTime * 3;
+        }
+    }
+
+}
+
 function addEnemy () {
 
     if (button.addEnemy.isDown || game.time.time > enemyConfig.time)
     {
-        var sprite = game.add.sprite(game.rnd.integerInRange(0, game.width), game.rnd.integerInRange(25, game.height / 3 + 50), enemyConfig.images[game.rnd.integerInRange(0, enemyConfig.images.length -1)]);
-        game.physics.enable(sprite, Phaser.Physics.ARCADE);
-        sprite.body.collideWorldBounds = false;
-        sprite.body.checkCollision.up = false;
-        sprite.body.checkCollision.down = true;
-        enemyConfig.sprites.push(sprite);
+        var enemy = enemies.create(game.rnd.integerInRange(0, game.width), game.rnd.integerInRange(25, game.height / 3 + 50), enemyConfig.images[game.rnd.integerInRange(0, enemyConfig.images.length -1)]);
+        enemy.fireTime = 0;
         enemyConfig.time = game.time.time + enemyConfig.spawnTime;   
     }
 
 }
 
 function moveEnemies() {
-    if (game.time.time > enemyConfig.time -  enemyConfig.spawnTime || !enemyConfig.sprites)
+    if (game.time.time > enemyConfig.time -  enemyConfig.spawnTime || !enemies)
         return;
 
-    for (i = 0; i < enemyConfig.sprites.length; i++) {
-        if(!enemyConfig.sprites[i].body)
+    for (var i = 0; i < enemies.children.length; i++) {
+        if(!enemies.children[i].body)
             continue;
 
+        fireEnemyBullet(enemies.children[i]);
+
         if(game.rnd.integerInRange(0, 2) == 1)
-            enemyConfig.sprites[i].body.velocity.x = enemyConfig.velocity;
+            enemies.children[i].body.velocity.x = enemyConfig.velocity;
         else
-            enemyConfig.sprites[i].body.velocity.x = -enemyConfig.velocity;
+            enemies.children[i].body.velocity.x = -enemyConfig.velocity;
     }
 }
 
-function killEnemy (bullet, opposed) {
+function killEnemy (bullet, enemy) {
     bullet.kill();
-    opposed.kill();
+    enemy.destroy();
     audio.alien_death1.play();
 
     score += 55;
@@ -92,8 +105,14 @@ function killEnemy (bullet, opposed) {
     enemyConfig.spawnTime -= 5;
 }
 
-function resetBullet(bullet) {
-    bullet.kill();
+function onGameOver (bullet, player) {
+    if(!texts.center){
+        texts.center = game.add.bitmapText(game.world.centerX, game.world.centerY, 'carrier_command','----- Game Over -----\n\nScore: ' + score + '\n\n' + 'Time: ' + getFormattedTime() + '\n\n\nClick to restart', 15);
+        texts.center.anchor.set(0.5);
+    }
+
+    game.paused = true;
+    gameOver = true;
 }
 
 function onGamePaused(){
@@ -112,4 +131,17 @@ function onGameResume(){
 
     game.world.remove(texts.center);
     texts.center = null;
+}
+
+function restartGame(){
+    score = 0;
+    timer.time = 0;
+    gameOver = false;
+    enemyConfig = {
+        images: ['ufo', 'wabbit' , 'yellow_ball', 'tomato', 'phaser-ship', 'phaser-dude'],
+        velocity: 200,
+        time: 0,
+        spawnTime: 700
+    };
+    game.state.restart();
 }

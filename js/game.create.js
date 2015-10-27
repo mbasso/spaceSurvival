@@ -3,14 +3,26 @@ var player;
 var bullets;
 var bulletTime = 0;
 
+var enemyBullets;
+
 var cursors;
 
 var background;
 
+var enemies;
+
+var gameOver = false;
+
+var timer = {
+    time: 0,
+    self: null
+};
+
 var texts = {
     score: null,
     center: null,
-    menu: null
+    menu: null,
+    timer: null
 };
 
 var score = 0;
@@ -32,8 +44,7 @@ var enemyConfig = {
 	images: ['ufo', 'wabbit' , 'yellow_ball', 'tomato', 'phaser-ship', 'phaser-dude'],
 	velocity: 200,
 	time: 0,
-    spawnTime: 700,
-	sprites: []
+    spawnTime: 700
 };
 
 function create() {
@@ -48,9 +59,19 @@ function create() {
     bullets.setAll('checkWorldBounds', true);
     bullets.setAll('outOfBoundsKill', true);
 
+    enemyBullets = game.add.physicsGroup();
+    //enemyBullets.createMultiple(32, 'particle_small', false);
+    enemyBullets.setAll('checkWorldBounds', true);
+    enemyBullets.setAll('outOfBoundsKill', true);
+    enemyBullets.setAll('checkCollision.down', true);
+
     player = game.add.sprite(game.world.centerX, game.height - 50, 'ship');
     game.physics.arcade.enable(player);
     player.body.collideWorldBounds = true;
+    player.body.checkCollision.up = true;
+
+    enemies = game.add.physicsGroup();
+    enemies.setAll('outOfBoundsKill', true);
 
     cursors = game.input.keyboard.createCursorKeys();
     button.fire = game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR);
@@ -63,11 +84,16 @@ function create() {
     audio.blaster = game.add.audio('blaster');
 
     texts.score = game.add.bitmapText(10, 10, 'carrier_command','Score: ' + score, 10);
-    texts.score.inputEnabled = true;
-    texts.score.input.enableDrag();
 
     texts.menu = game.add.bitmapText(game.world.width - 10, 10, 'carrier_command','Menu', 10);
     texts.menu.anchor.x = 1;
+
+    texts.timer = game.add.bitmapText(game.world.centerX, 10, 'carrier_command', '00:00:00', 10);
+    texts.timer.anchor.set(0.5);
+
+    timer.self = game.time.create(false);
+    timer.self.loop(1000, updateCounter, this);
+    timer.self.start();
 
     game.onPause.add(onGamePaused, this);
     game.onResume.add(onGameResume, this);
@@ -75,7 +101,14 @@ function create() {
     game.onFocus.add(onGameResume, this);
 
     game.input.onDown.add(function(event){
-        game.paused = false;
+        if(gameOver)
+            restartGame();
+        else
+            game.paused = false;
     }, self);
 
+}
+
+function updateCounter() {
+    timer.time++;
 }

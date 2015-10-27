@@ -15,6 +15,7 @@ function preload() {
     game.load.image('starfield','misc/starfield.png');
 
     game.load.image('bullet', 'misc/bullet0.png');
+    game.load.image('particle_small', 'misc/particle_small.png');
 
     game.load.audio('alien_death1', 'audio/SoundEffects/alien_death1.wav');
     game.load.audio('player_death', 'audio/SoundEffects/player_death.wav');
