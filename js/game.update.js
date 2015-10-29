@@ -11,6 +11,7 @@ function update () {
     }
 
     player.body.velocity.x = 0;
+    player1.body.velocity.x = 0;
 
     if (cursors.left.isDown)
     {
@@ -26,15 +27,32 @@ function update () {
         fireBullet();
     }
 
-    game.physics.arcade.collide(bullets, enemies, killEnemy, null, this);
-    game.physics.arcade.collide(enemyBullets, player, onGameOver, null, this);
+    if (button.left1.isDown)
+    {
+        player1.body.velocity.x = -600;
+    }
 
-    addEnemy();
-    moveEnemies();
+    else if (button.right1.isDown)
+    {
+        player1.body.velocity.x = 600;
+    }
+
+    if (button.fire1.isDown)
+    {
+        fireBullet1();
+    }
+
+    game.physics.arcade.collide(bullets, player1, shot, null, this);
+    game.physics.arcade.collide(bullets1, player, shot, null, this);
+    game.physics.arcade.collide(bullets, bullets1, bulletToBullet, null, this);
+
+    //addEnemy();
+    //moveEnemies();
 
 }
 
-function fireBullet () {
+function fireBullet ()
+{
 
     if (game.time.time > bulletTime)
     {
@@ -51,7 +69,25 @@ function fireBullet () {
 
 }
 
-function fireEnemyBullet (enemy) {
+function fireBullet1 ()
+{
+
+    if (game.time.time > bulletTime)
+    {
+        var bullet1 = bullets1.getFirstExists(false);
+
+        if (bullet1)
+        {
+            audio.blaster.play();
+            bullet1.reset(player1.x + 6, player1.y + 12);
+            bullet1.body.velocity.y = +600;
+            bulletTime = game.time.time + 100;
+        }
+    }
+
+}
+
+/*function fireEnemyBullet (enemy) {
 
     if (game.time.time > enemy.fireTime)
     {
@@ -104,10 +140,43 @@ function killEnemy (bullet, enemy) {
     //enemyConfig.velocity += 2;
     enemyConfig.spawnTime -= 5;
 }
+*/
 
-function onGameOver (bullet, player) {
+function bulletToBullet (bull, bull1) {
+    bull.kill();
+    bull1.kill();
+    audio.bulletToBullet.play();
+        }
+
+
+function shot (play, bull) {
+    if(play == player) {
+        life--;
+    player.body.velocity.y = 0;
+    }
+    else{
+        life1--;
+    player1.body.velocity.y = 0;
+    }
+    bull.kill();
+    if(life == 0){
+        winner += '2';
+        play.kill()
+        onGameOver(winner);
+    }
+    if(life1 == 0) {
+        winner += '1';
+        play.kill()
+        onGameOver(winner);
+   }
+    audio.player_death.play();
+        }
+
+    
+
+function onGameOver (winner) {
     if(!texts.center){
-        texts.center = game.add.bitmapText(game.world.centerX, game.world.centerY, 'carrier_command','----- Game Over -----\n\nScore: ' + score + '\n\n' + 'Time: ' + getFormattedTime() + '\n\n\nClick to restart', 15);
+        texts.center = game.add.bitmapText(game.world.centerX, game.world.centerY, 'carrier_command','----- Game Over -----\n\n' + winner + ' wins!\n\n' + 'Time: ' + getFormattedTime() + '\n\n\nClick to restart', 15);
         texts.center.anchor.set(0.5);
     }
 
@@ -135,13 +204,16 @@ function onGameResume(){
 
 function restartGame(){
     score = 0;
+    life = 3;
+    life1 = 3;
+    winner = 'player ';
     timer.time = 0;
     gameOver = false;
-    enemyConfig = {
+    /*enemyConfig = {
         images: ['ufo', 'wabbit' , 'yellow_ball', 'tomato', 'phaser-ship', 'phaser-dude'],
         velocity: 200,
         time: 0,
         spawnTime: 700
-    };
+    };*/
     game.state.restart();
 }
