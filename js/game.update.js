@@ -46,9 +46,6 @@ function update () {
     game.physics.arcade.collide(bullets1, player, shot, null, this);
     game.physics.arcade.collide(bullets, bullets1, bulletToBullet, null, this);
 
-    //addEnemy();
-    //moveEnemies();
-
 }
 
 function fireBullet ()
@@ -87,60 +84,6 @@ function fireBullet1 ()
 
 }
 
-/*function fireEnemyBullet (enemy) {
-
-    if (game.time.time > enemy.fireTime)
-    {
-        var bullet = enemyBullets.create(enemy.x - 6, enemy.y + 12, 'particle_small');
-
-        if (bullet)
-        {
-            bullet.body.velocity.y = 200;
-            enemy.fireTime = game.time.time + enemyConfig.spawnTime * 3;
-        }
-    }
-
-}
-
-function addEnemy () {
-
-    if (button.addEnemy.isDown || game.time.time > enemyConfig.time)
-    {
-        var enemy = enemies.create(game.rnd.integerInRange(0, game.width), game.rnd.integerInRange(25, game.height / 3 + 50), enemyConfig.images[game.rnd.integerInRange(0, enemyConfig.images.length -1)]);
-        enemy.fireTime = 0;
-        enemyConfig.time = game.time.time + enemyConfig.spawnTime;   
-    }
-
-}
-
-function moveEnemies() {
-    if (game.time.time > enemyConfig.time -  enemyConfig.spawnTime || !enemies)
-        return;
-
-    for (var i = 0; i < enemies.children.length; i++) {
-        if(!enemies.children[i].body)
-            continue;
-
-        fireEnemyBullet(enemies.children[i]);
-
-        if(game.rnd.integerInRange(0, 2) == 1)
-            enemies.children[i].body.velocity.x = enemyConfig.velocity;
-        else
-            enemies.children[i].body.velocity.x = -enemyConfig.velocity;
-    }
-}
-
-function killEnemy (bullet, enemy) {
-    bullet.kill();
-    enemy.destroy();
-    audio.alien_death1.play();
-
-    score += 55;
-    texts.score.setText("Score: " + score);
-    //enemyConfig.velocity += 2;
-    enemyConfig.spawnTime -= 5;
-}
-*/
 
 function bulletToBullet (bull, bull1) {
     bull.kill();
@@ -209,11 +152,5 @@ function restartGame(){
     winner = 'player ';
     timer.time = 0;
     gameOver = false;
-    /*enemyConfig = {
-        images: ['ufo', 'wabbit' , 'yellow_ball', 'tomato', 'phaser-ship', 'phaser-dude'],
-        velocity: 200,
-        time: 0,
-        spawnTime: 700
-    };*/
     game.state.restart();
 }
