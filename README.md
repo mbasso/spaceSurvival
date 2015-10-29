@@ -6,12 +6,11 @@
 
 Space Survival is a simple game designed with [Phaser.io](http://phaser.io/).
 
-##Author
+##Authors
 **Matteo Basso**
 - [github/mbasso](https://github.com/mbasso)
 - [mbasso96@gmail.com](mailto:mbasso96@gmail.com)
 
-##Contributors
 **Federico Bottoni**
 - [github/federicobottoni](https://github.com/federicobottoni)
 - [bottoni.fede@yahoo.it](mailto:bottoni.fede@yahoo.it)
