@@ -69,7 +69,7 @@ function fireBullet ()
 function fireBullet1 ()
 {
 
-    if (game.time.time > bulletTime)
+    if (game.time.time > bulletTime1)
     {
         var bullet1 = bullets1.getFirstExists(false);
 
@@ -78,7 +78,7 @@ function fireBullet1 ()
             audio.blaster.play();
             bullet1.reset(player1.x + 6, player1.y + 12);
             bullet1.body.velocity.y = +600;
-            bulletTime = game.time.time + 100;
+            bulletTime1 = game.time.time + 100;
         }
     }
 

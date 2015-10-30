@@ -4,6 +4,7 @@ var player1;
 var bullets;
 var bulletTime = 0;
 var bullets1;
+var bulletTime1 = 0;
 
 var life = 3;
 var life1 = 3;
