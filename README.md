@@ -4,7 +4,11 @@
 
 ![alt tag](https://github.com/mbasso/spaceSurvival/blob/master/screenshot.jpg)
 
-Space Survival is a simple game designed with [Phaser.io](http://phaser.io/).
+Space Survival is a simple, free, open source game designed with [Phaser.io](http://phaser.io/).
+
+Two game modes are avaible at the moment:
+- Singleplayer, fight against enemies from space
+- Local multiplayer, fight against a friend
 
 ##Authors
 **Matteo Basso**
