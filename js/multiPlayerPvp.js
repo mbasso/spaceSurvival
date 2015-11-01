@@ -39,7 +39,7 @@ var multiPlayerPvp = {
 	    game.load.image('bullet2', 'misc/particle_small.png');
 
 	    
-	    game.load.audio('player_death', 'audio/SoundEffects/player_death.wav');
+	    game.load.audio('player_death', 'audio/SoundEffects/ricochet_metal_0'+ Math.floor((Math.random() * 9) + 1) +'.wav');
 	    game.load.audio('bulletCollision', 'audio/SoundEffects/lazer.wav');
 	    game.load.audio('blaster', 'audio/SoundEffects/blaster.mp3');
 
