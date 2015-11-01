@@ -27,7 +27,7 @@ var multiPlayerPvp = {
 	},
 	preload: function(){
 
-		game.load.baseURL = 'http://examples.phaser.io/assets/';
+		game.load.baseURL = 'assets/';
 	    game.load.crossOrigin = 'anonymous';
 
 	    game.load.image('ship', 'sprites/thrust_ship2.png');
