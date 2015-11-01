@@ -13,7 +13,7 @@ var multiPlayerPvp = {
 		player_death: null
 	},
 	texts: {
-	    score: 'P1 0, P2 0',
+	    score: null,
 	    menu: null,
 	    timer: null
 	},
@@ -80,7 +80,7 @@ var multiPlayerPvp = {
 
 	    this.player2.ship.angle = 0;
 
-	    this.texts.score = game.add.bitmapText(game.world.leftX, 10, 'carrier_command', this.texts.score, 10);
+	    this.texts.score = game.add.bitmapText(game.world.leftX, 10, 'carrier_command', 'P1 ' + this.score1 + ', P2 ' + this.score2, 10);
 
 	    this.texts.menu = game.add.bitmapText(game.world.width - 10, 10, 'carrier_command','Menu', 10);
 	    this.texts.menu.anchor.x = 1;
@@ -146,7 +146,6 @@ var multiPlayerPvp = {
 		if(this.lives.player1 == 0 || this.lives.player2 == 0)
 		{
 			player.kill();
-			this.texts.score = 'P1 ' + this.score1 + ', P2 ' + this.score2;
 			this.onGameOver();
 		}
 	},
@@ -154,7 +153,7 @@ var multiPlayerPvp = {
 	onGameOver: function() {
 
         if(!centerText){
-            centerText = game.add.bitmapText(game.world.centerX, game.world.centerY, 'carrier_command','----- Game Over -----\n\nScore: ' + this.texts.score + '\n\n' + 'Time: ' + this.timer.getFormattedTime() + '\n\n\nClick to restart', 15);
+            centerText = game.add.bitmapText(game.world.centerX, game.world.centerY, 'carrier_command','----- Game Over -----\n\nScore: P1 ' + this.score1 + ', P2 ' + this.score2 + '\n\n' + 'Time: ' + this.timer.getFormattedTime() + '\n\n\nClick to restart', 15);
             centerText.anchor.set(0.5);
         }
 
