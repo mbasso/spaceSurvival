@@ -26,8 +26,6 @@ function player(image, bulletImage, fireSound, direction, cursors, fireButton, x
                 y = game.height - 50;
                 break;
             case 'left':
-                y = game.world.centerY;
-                break;
             case 'right':
                 y = game.world.centerY;
                 break;

@@ -4,9 +4,6 @@ var singlePlayer = {
 	timer: null,
 	gameOver: null,
 	enemies: null,
-	audio: {
-		player_death: null
-	},
 	texts: {
 	    score: null,
 	    center: null,
@@ -19,7 +16,7 @@ var singlePlayer = {
 	},
 	preload: function(){
 
-		game.load.baseURL = 'http://examples.phaser.io/assets/';
+		game.load.baseURL = 'assets/';
 	    game.load.crossOrigin = 'anonymous';
 
 	    game.load.image('ship', 'sprites/thrust_ship2.png');
@@ -27,7 +24,7 @@ var singlePlayer = {
 	    game.load.image('ufo', 'sprites/ufo.png');
 	    game.load.image('wabbit', 'sprites/wabbit.png');
 	    game.load.image('yellow_ball', 'sprites/yellow_ball.png');
-	    game.load.image('hotdog', 'sprites/hotdog.png');
+	    //game.load.image('hotdog', 'sprites/hotdog.png');
 	    game.load.image('tomato', 'sprites/tomato.png');
 	    game.load.image('phaser-ship', 'sprites/phaser-ship.png');
 	    game.load.image('phaser-dude', 'sprites/phaser-dude.png');
@@ -37,7 +34,6 @@ var singlePlayer = {
 	    game.load.image('particle_small', 'misc/particle_small.png');
 
 	    game.load.audio('alien_death1', 'audio/SoundEffects/alien_death1.wav');
-	    game.load.audio('player_death', 'audio/SoundEffects/player_death.wav');
 	    game.load.audio('blaster', 'audio/SoundEffects/blaster.mp3');
 
 	},
@@ -61,8 +57,6 @@ var singlePlayer = {
 
 	    this.button.restart = game.input.keyboard.addKey(Phaser.KeyCode.R);
 	    this.button.pause = game.input.keyboard.addKey(Phaser.KeyCode.P);
-
-	    this.audio.player_death = game.add.audio('player_death');
 
 	    this.player = new player('ship', 
 	    	'bullet', 
