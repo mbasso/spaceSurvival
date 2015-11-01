@@ -3,7 +3,7 @@ var menu = {
 		title: null,
 		modes: {
 			singleplayer: null,
-			multiplayerOffline: null,
+			multiplayerPvp: null,
 			multiplayerOnline: null
 		},
 		github: null,
@@ -23,11 +23,15 @@ var menu = {
 		this.texts.title = game.add.bitmapText(game.world.centerX, 100, 'carrier_command','Space Survival', 22);
 		this.texts.title.anchor.set(0.5);
 
-	    this.texts.singleplayer = this.setText(200, 'Single Player', 15, function(){
+	    this.texts.singleplayer = this.setText(200, 'Singleplayer', 15, function(){
 			game.state.start('SinglePlayer');
 		});
 
-		this.texts.github = this.setText(250, 'Fork me on github', 15, function(){
+		this.texts.multiplayerPvp = this.setText(250, 'Multiplayer PVP', 15, function(){
+			game.state.start('MultiPlayerPvp');
+		});
+
+		this.texts.github = this.setText(300, 'Fork me on github', 15, function(){
 			window.open('https://github.com/mbasso/spaceSurvival', '_blank');
 		});
 
