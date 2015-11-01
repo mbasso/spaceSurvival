@@ -56,7 +56,7 @@ function player(image, bulletImage, fireSound, direction, cursors, fireButton, x
 
     switch(direction){
         case 'down':
-            this.ship.angle = 180;
+            this.ship.angle = 0;
             this.bulletConfig.startX = -22;
             this.bulletConfig.startY = -12;
             this.bulletConfig.velocityY = 600;

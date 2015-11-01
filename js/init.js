@@ -8,6 +8,7 @@ function onGamePaused(){
 
     switch(game.state.current){
         case 'SinglePlayer':
+        case 'MultiPlayerPvp':
 
             if(!this.texts.center){
                 this.texts.center = game.add.bitmapText(game.world.centerX, game.world.centerY, 'carrier_command','----- Pause -----\n\nClick to continue', 15);
@@ -15,6 +16,7 @@ function onGamePaused(){
             }
 
             break;
+
     }
 
 }
@@ -23,6 +25,10 @@ function onGameResume(){
 
     switch(game.state.current){
         case 'SinglePlayer':
+
+            if(game.paused)
+                break;
+        case 'MultiPlayerPvp':
 
             if(game.paused)
                 break;
@@ -43,12 +49,14 @@ window.onload = function() {
     
     game.state.add('Menu', menu);
     game.state.add('SinglePlayer', singlePlayer);
+    game.state.add('MultiPlayerPvp', multiPlayerPvp);
     game.state.add('Help', help);
     game.state.onStateChange.add(onStateChange);
 
     delete gameArea;
     delete menu;
     delete singlePlayer;
+    delete multiPlayerPvp;
     delete help;
 
 };
