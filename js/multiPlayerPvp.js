@@ -5,17 +5,15 @@ var multiPlayerPvp = {
 	score2: 0,
 	timer: null,
 	gameOver: null,
-	lifes: {
+	lives: {
 		player1: null,
 		player2: null
 	},
 	audio: {
-		player_death1: null,
-		player_death2: null
+		player_death: null
 	},
 	texts: {
 	    score: 'P1 0, P2 0',
-	    center: null,
 	    menu: null,
 	    timer: null
 	},
@@ -23,7 +21,7 @@ var multiPlayerPvp = {
 	    restart: null,
 	    pause: null
 	},
-	cursor2: {
+	player2_cursor: {
 	    left: null,
 	    right: null
 	},
@@ -42,18 +40,18 @@ var multiPlayerPvp = {
 
 	    
 	    game.load.audio('player_death', 'audio/SoundEffects/player_death.wav');
-	    game.load.audio('bulletToBullet', 'audio/SoundEffects/lazer.wav');
+	    game.load.audio('bulletCollision', 'audio/SoundEffects/lazer.wav');
 	    game.load.audio('blaster', 'audio/SoundEffects/blaster.mp3');
 
 	},
 	create: function(){
 
-		this.lifes.player1 = 3;
-		this.lifes.player2 = 3;
+		this.lives.player1 = 3;
+		this.lives.player2 = 3;
 
 		this.gameOver = false;
-		this.cursor2.left = game.input.keyboard.addKey(Phaser.KeyCode.A);
-		this.cursor2.right = game.input.keyboard.addKey(Phaser.KeyCode.D);
+		this.player2_cursor.left = game.input.keyboard.addKey(Phaser.KeyCode.A);
+		this.player2_cursor.right = game.input.keyboard.addKey(Phaser.KeyCode.D);
 
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 	    game.add.tileSprite(0, 0, game.world.width, game.world.height, 'starfield');
@@ -62,7 +60,7 @@ var multiPlayerPvp = {
 	    this.button.pause = game.input.keyboard.addKey(Phaser.KeyCode.P);
 
 	    this.audio.player_death = game.add.audio('player_death');
-	    this.audio.bulletToBullet = game.add.audio('bulletToBullet');
+	    this.audio.bulletCollision = game.add.audio('bulletCollision');
 
 	    this.player1 = new player('ship', 
 	    	'bullet1', 
@@ -76,9 +74,11 @@ var multiPlayerPvp = {
 	    	'bullet2', 
 	    	'blaster', 
 	    	'down', 
-	    	this.cursor2, 
+	    	this.player2_cursor, 
 	    	game.input.keyboard.addKey(Phaser.Keyboard.W)
 	    );
+
+	    this.player2.ship.angle = 0;
 
 	    this.texts.score = game.add.bitmapText(game.world.leftX, 10, 'carrier_command', this.texts.score, 10);
 
@@ -93,12 +93,6 @@ var multiPlayerPvp = {
 
 	    this.timer = new timer();
 	    game.time.events.loop(Phaser.Timer.SECOND, this.timer.updateTime, this);
-
-
-	    game.onPause.add(onGamePaused, this);
-	    game.onResume.add(onGameResume, this);
-	    game.onBlur.add(onGamePaused, this);
-	    game.onFocus.add(onGameResume, this);
 
 	    game.input.onDown.add(function(event){
 	        if(this.gameOver){
@@ -115,8 +109,8 @@ var multiPlayerPvp = {
 	},
 	update: function(){
 
-		if (this.button.restart.isDown)
-	        //game.state.restart();
+		/*if (this.button.restart.isDown)
+	        game.state.restart();*/
 
 	    if (this.button.pause.isDown)
 	        game.paused = true;
@@ -124,32 +118,32 @@ var multiPlayerPvp = {
 	    this.player1.update();
 	    this.player2.update();
 
-	    game.physics.arcade.collide(this.player1.bullets, this.player2.ship, this.shot, null, this);
-	    game.physics.arcade.collide(this.player2.bullets, this.player1.ship, this.shot, null, this);
-	    game.physics.arcade.collide(this.player1.bullets, this.player2.bullets, this.bulletToBullet, null, this);
+	    game.physics.arcade.collide(this.player1.bullets, this.player2.ship, this.killPlayer, null, this);
+	    game.physics.arcade.collide(this.player2.bullets, this.player1.ship, this.killPlayer, null, this);
+	    game.physics.arcade.collide(this.player1.bullets, this.player2.bullets, this.bulletCollision, null, this);
 
 	},
 
-	bulletToBullet: function(bullet2, bullet1){
+	bulletCollision: function(bullet2, bullet1){
 		bullet1.kill();
 		bullet2.kill();
-		this.audio.bulletToBullet.play();
+		this.audio.bulletCollision.play();
 	},
 
-	shot: function(player, bullet){
+	killPlayer: function(player, bullet){
 		if(player == this.player1.ship)
-			this.lifes.player1--;
+			this.lives.player1--;
 		else
-			this.lifes.player2--;
+			this.lives.player2--;
 		this.audio.player_death.play();
 		bullet.kill();
 
-		if(this.lifes.player2 == 0)
+		if(this.lives.player2 == 0)
 			this.score1++;
-		if(this.lifes.player1 == 0)
+		if(this.lives.player1 == 0)
 			this.score2++;
 
-		if(this.lifes.player1 == 0 || this.lifes.player2 == 0)
+		if(this.lives.player1 == 0 || this.lives.player2 == 0)
 		{
 			player.kill();
 			this.texts.score = 'P1 ' + this.score1 + ', P2 ' + this.score2;
@@ -159,10 +153,9 @@ var multiPlayerPvp = {
 	
 	onGameOver: function() {
 
-
-        if(!this.texts.center){
-            this.texts.center = game.add.bitmapText(game.world.centerX, game.world.centerY, 'carrier_command','----- Game Over -----\n\nScore: ' + this.texts.score + '\n\n' + 'Time: ' + this.timer.getFormattedTime() + '\n\n\nClick to restart', 15);
-            this.texts.center.anchor.set(0.5);
+        if(!centerText){
+            centerText = game.add.bitmapText(game.world.centerX, game.world.centerY, 'carrier_command','----- Game Over -----\n\nScore: ' + this.texts.score + '\n\n' + 'Time: ' + this.timer.getFormattedTime() + '\n\n\nClick to restart', 15);
+            centerText.anchor.set(0.5);
         }
 
         game.paused = true;

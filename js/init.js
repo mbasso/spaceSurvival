@@ -1,4 +1,5 @@
 var game;
+var centerText;
 
 function onStateChange(){
     game.input.onDown.removeAll();
@@ -10,9 +11,9 @@ function onGamePaused(){
         case 'SinglePlayer':
         case 'MultiPlayerPvp':
 
-            if(!this.texts.center){
-                this.texts.center = game.add.bitmapText(game.world.centerX, game.world.centerY, 'carrier_command','----- Pause -----\n\nClick to continue', 15);
-                this.texts.center.anchor.set(0.5);
+            if(!centerText){
+                centerText = game.add.bitmapText(game.world.centerX, game.world.centerY, 'carrier_command','----- Pause -----\n\nClick to continue', 15);
+                centerText.anchor.set(0.5);
             }
 
             break;
@@ -25,16 +26,13 @@ function onGameResume(){
 
     switch(game.state.current){
         case 'SinglePlayer':
-
-            if(game.paused)
-                break;
         case 'MultiPlayerPvp':
 
             if(game.paused)
                 break;
 
-            game.world.remove(this.texts.center);
-            this.texts.center = null;
+            game.world.remove(centerText);
+            centerText = null;
 
             break;
     }

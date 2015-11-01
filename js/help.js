@@ -17,10 +17,10 @@ var help = {
 			game.world.centerX, 
 			game.world.centerY, 
 			'carrier_command', 
-			'R - restart\n\nP - pause\n\nSpacebar - fire\n\nArrows - move\n\n\nPlayer 2:\n\n W/A - move', 
+			'R - restart\n\nP - pause\n\nSpacebar - fire\n\nArrows - move\n\n\nPlayer 2:\n\nA/D - move\n\nW - fire', 
 			15
 		).anchor.set(0.5);
-		
+
 	},
 	render: function(){
 		

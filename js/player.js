@@ -54,33 +54,33 @@ function player(image, bulletImage, fireSound, direction, cursors, fireButton, x
 
     switch(direction){
         case 'down':
-            this.ship.angle = 0;
-            this.bulletConfig.startX = -22;
-            this.bulletConfig.startY = -12;
+            this.ship.angle = 180;
+            this.bulletConfig.startX = -this.ship.width / 4;
+            this.bulletConfig.startY = -this.ship.height / 2;
             this.bulletConfig.velocityY = 600;
             this.bulletConfig.angle = 0;
             this.ship.body.checkCollision.down = true;
             break;
         case 'up':
             this.ship.angle = 0;
-            this.bulletConfig.startX = 6;
-            this.bulletConfig.startY = -12;
+            this.bulletConfig.startX = this.ship.width / 4;
+            this.bulletConfig.startY = -this.ship.height / 2;
             this.bulletConfig.velocityY = -600;
             this.bulletConfig.angle = 0;
             this.ship.body.checkCollision.up = true;
             break;
         case 'left':
             this.ship.angle = 270;
-            this.bulletConfig.startX = -12;
-            this.bulletConfig.startY = -6;
+            this.bulletConfig.startX = -this.ship.width / 2;
+            this.bulletConfig.startY = -this.ship.height / 4;
             this.bulletConfig.velocityX = -600;
             this.bulletConfig.angle = 270;
             this.ship.body.checkCollision.left = true;
             break;
         case 'right':
             this.ship.angle = 90;
-            this.bulletConfig.startX = 12;
-            this.bulletConfig.startY = 6;
+            this.bulletConfig.startX = this.ship.width / 2;
+            this.bulletConfig.startY = this.ship.height / 4;
             this.bulletConfig.velocityX = 600;
             this.bulletConfig.angle = 90;
             this.ship.body.checkCollision.right = true;

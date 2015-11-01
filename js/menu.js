@@ -35,9 +35,14 @@ var menu = {
 			window.open('https://github.com/mbasso/spaceSurvival', '_blank');
 		});
 
-		this.texts.help = this.setText(300, 'Help', 15, function(){
+		this.texts.help = this.setText(350, 'Help', 15, function(){
 			game.state.start('Help');
 		});
+
+		game.onPause.add(onGamePaused, this);
+	    game.onResume.add(onGameResume, this);
+	    game.onBlur.add(onGamePaused, this);
+	    game.onFocus.add(onGameResume, this);
 
 	},
 	setText: function(height, text, size, callback){

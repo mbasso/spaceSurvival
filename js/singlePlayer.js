@@ -6,7 +6,6 @@ var singlePlayer = {
 	enemies: null,
 	texts: {
 	    score: null,
-	    center: null,
 	    menu: null,
 	    timer: null
 	},
@@ -79,12 +78,6 @@ var singlePlayer = {
 	    this.timer = new timer();
 	    game.time.events.loop(Phaser.Timer.SECOND, this.timer.updateTime, this);
 
-
-	    game.onPause.add(onGamePaused, this);
-	    game.onResume.add(onGameResume, this);
-	    game.onBlur.add(onGamePaused, this);
-	    game.onFocus.add(onGameResume, this);
-
 	    game.input.onDown.add(function(event){
 	        if(this.gameOver){
 	        	game.paused = false;
@@ -123,9 +116,9 @@ var singlePlayer = {
 	},
 	onGameOver: function(bullet, player) {
 
-        if(!this.texts.center){
-            this.texts.center = game.add.bitmapText(game.world.centerX, game.world.centerY, 'carrier_command','----- Game Over -----\n\nScore: ' + this.score + '\n\n' + 'Time: ' + this.timer.getFormattedTime() + '\n\n\nClick to restart', 15);
-            this.texts.center.anchor.set(0.5);
+        if(!centerText){
+            centerText = game.add.bitmapText(game.world.centerX, game.world.centerY, 'carrier_command','----- Game Over -----\n\nScore: ' + this.score + '\n\n' + 'Time: ' + this.timer.getFormattedTime() + '\n\n\nClick to restart', 15);
+            centerText.anchor.set(0.5);
         }
 
         game.paused = true;
