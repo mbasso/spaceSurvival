@@ -3,6 +3,7 @@ var multiPlayerPvp = {
 	player2: null,
 	score1: 0,
 	score2: 0,
+	heart: null,
 	timer: null,
 	gameOver: null,
 	lives: {
@@ -13,6 +14,7 @@ var multiPlayerPvp = {
 		player_death: null
 	},
 	texts: {
+		lives: null,
 	    score: null,
 	    menu: null,
 	    timer: null
@@ -38,6 +40,8 @@ var multiPlayerPvp = {
 	    game.load.image('bullet1', 'misc/bullet0.png');
 	    game.load.image('bullet2', 'misc/particle_small.png');
 
+	    //game.load.image('heart', 'misc/heart.png');
+
 	    
 	    game.load.audio('player_death', 'audio/SoundEffects/ricochet_metal_0'+ Math.floor((Math.random() * 9) + 1) +'.wav');
 	    game.load.audio('bulletCollision', 'audio/SoundEffects/lazer.wav');
@@ -48,6 +52,8 @@ var multiPlayerPvp = {
 
 		this.lives.player1 = 3;
 		this.lives.player2 = 3;
+        
+		//this.heart = game.add.image(0,0, 'heart');
 
 		this.gameOver = false;
 		this.player2_cursor.left = game.input.keyboard.addKey(Phaser.KeyCode.A);
@@ -80,7 +86,7 @@ var multiPlayerPvp = {
 
 	    this.player2.ship.angle = 0;
 
-	    this.texts.score = game.add.bitmapText(game.world.leftX, 10, 'carrier_command', 'P1 ' + this.score1 + ', P2 ' + this.score2, 10);
+	    this.texts.score = game.add.bitmapText(game.world.leftX, 10, 'carrier_command', 'SCORE1 ' + this.score1 + ', SCORE2 ' + this.score2, 10);
 
 	    this.texts.menu = game.add.bitmapText(game.world.width - 10, 10, 'carrier_command','Menu', 10);
 	    this.texts.menu.anchor.x = 1;
@@ -88,6 +94,10 @@ var multiPlayerPvp = {
 		this.texts.menu.events.onInputUp.add(function(){
 			game.state.start('Menu');
 		}, this);
+
+		this.texts.lives = game.add.bitmapText(game.world.leftX, 50, 'carrier_command', 'LIVES1 3, LIVES2 3', 10);
+	    this.texts.lives.anchor.set(0.0);
+
 	    this.texts.timer = game.add.bitmapText(game.world.centerX, 10, 'carrier_command', '00:00', 10);
 	    this.texts.timer.anchor.set(0.5);
 
@@ -106,6 +116,7 @@ var multiPlayerPvp = {
 	},
 	render: function(){
 		this.texts.timer.setText(this.timer.getFormattedTime());
+		this.texts.lives.setText('LIVES1 ' + this.lives.player1 + ', LIVES2 ' + this.lives.player2);
 	},
 	update: function(){
 
