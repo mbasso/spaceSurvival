@@ -80,7 +80,7 @@ var multiPlayerPvp = {
 
 	    this.player2.ship.angle = 0;
 
-	    this.texts.score = game.add.bitmapText(game.world.leftX, 10, 'carrier_command', 'P1 ' + this.score1 + ', P2 ' + this.score2, 10);
+	    this.texts.score = game.add.bitmapText(10, 10, 'carrier_command', 'P1 ' + this.score1 + ', P2 ' + this.score2, 10);
 
 	    this.texts.menu = game.add.bitmapText(game.world.width - 10, 10, 'carrier_command','Menu', 10);
 	    this.texts.menu.anchor.x = 1;

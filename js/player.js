@@ -1,4 +1,4 @@
-function player(image, bulletImage, fireSound, direction, cursors, fireButton, x, y) {
+function player(image, bulletImage, fireSound, direction, cursors, fireButton, id, x, y) {
 
     var self = this;
 
@@ -36,6 +36,9 @@ function player(image, bulletImage, fireSound, direction, cursors, fireButton, x
 
     this.fireButton = fireButton;
     this.cursors = cursors;
+    this.input = this.cursors;
+
+    this.id = id;
 
     this.bulletConfig = {
         time: null,
@@ -116,7 +119,31 @@ function player(image, bulletImage, fireSound, direction, cursors, fireButton, x
 
     }
 
-    this.update = function() {
+    this.update = function(eurecaServer, id) {
+
+        if(eurecaServer){
+
+            var inputChanged = (
+                this.cursor.left != this.input.left ||
+                this.cursor.right != this.input.right ||
+                this.cursor.up != this.input.up ||
+                this.cursor.fire != this.input.fire
+            );
+            
+            
+            if (inputChanged)
+            {
+
+                if (this.id == id)
+                {
+                    this.input.x = this.tank.x;
+                    this.input.y = this.tank.y;
+                    
+                    eurecaServer.handleKeys(this.input);
+                }
+            }
+
+        }
 
         self.ship.body.velocity.x = 0;
         self.ship.body.velocity.y = 0;
