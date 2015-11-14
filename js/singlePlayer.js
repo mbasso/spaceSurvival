@@ -23,7 +23,7 @@ var singlePlayer = {
 	    game.load.image('ufo', 'sprites/ufo.png');
 	    game.load.image('wabbit', 'sprites/wabbit.png');
 	    game.load.image('yellow_ball', 'sprites/yellow_ball.png');
-	    //game.load.image('hotdog', 'sprites/hotdog.png');
+	    
 	    game.load.image('tomato', 'sprites/tomato.png');
 	    game.load.image('phaser-ship', 'sprites/phaser-ship.png');
 	    game.load.image('phaser-dude', 'sprites/phaser-dude.png');
@@ -57,13 +57,13 @@ var singlePlayer = {
 	    this.button.restart = game.input.keyboard.addKey(Phaser.KeyCode.R);
 	    this.button.pause = game.input.keyboard.addKey(Phaser.KeyCode.P);
 
-	    this.player = new player('ship', 
-	    	'bullet', 
-	    	'blaster', 
-	    	'up', 
-	    	game.input.keyboard.createCursorKeys(), 
-	    	game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
-	    );
+	    this.player = new player ({
+	    	image: 'ship',
+	    	bulletImage: 'bullet',
+	    	fireSound: 'blaster',
+	    	cursors: game.input.keyboard.createCursorKeys(),
+	    	fireButton: game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+	    });
 
 	    this.texts.score = game.add.bitmapText(10, 10, 'carrier_command','Score: ' + this.score, 10);
 	    this.texts.menu = game.add.bitmapText(game.world.width - 10, 10, 'carrier_command','Menu', 10);

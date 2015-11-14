@@ -1,110 +1,177 @@
-function player(image, bulletImage, fireSound, direction, cursors, fireButton, id, x, y) {
+function player(config) {
+
+    /*
+    {
+        image: 'ship',
+        bulletImage: 'bullet',
+        fireSound: 'blaster',
+        direction: 'up',
+        cursors: game.input.keyboard.createCursorKeys(),
+        fireButton: game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR),
+        id: 'AhdjlcUdhjds97fdHShl',
+        x: 100,
+        y: 250
+    }
+    */
 
     var self = this;
 
-    if(!x){
-        switch(direction){
-            case 'down':
-            case 'up':
-                x = game.world.centerX;
-                break;
-            case 'left':
-                x = game.width - 50;
-                break;
-            case 'right':
-                x = 50;
-                break;
+    (function setup() {
+
+        this.direction = function (){
+
+            self.direction = config.direction;
+
+            switch(self.direction){
+                case 'down':
+                    self.ship.angle = 180;
+                    self.bulletConfig.startX = -self.ship.width / 4;
+                    self.bulletConfig.startY = -self.ship.height / 2;
+                    self.bulletConfig.velocityY = 600;
+                    self.bulletConfig.angle = 0;
+                    self.ship.body.checkCollision.down = true;
+                    break;
+                case 'up':
+                    self.ship.angle = 0;
+                    self.bulletConfig.startX = self.ship.width / 4;
+                    self.bulletConfig.startY = -self.ship.height / 2;
+                    self.bulletConfig.velocityY = -600;
+                    self.bulletConfig.angle = 0;
+                    self.ship.body.checkCollision.up = true;
+                    break;
+                case 'left':
+                    self.ship.angle = 270;
+                    self.bulletConfig.startX = -self.ship.width / 2;
+                    self.bulletConfig.startY = -self.ship.height / 4;
+                    self.bulletConfig.velocityX = -600;
+                    self.bulletConfig.angle = 270;
+                    self.ship.body.checkCollision.left = true;
+                    break;
+                case 'right':
+                    self.ship.angle = 90;
+                    self.bulletConfig.startX = self.ship.width / 2;
+                    self.bulletConfig.startY = self.ship.height / 4;
+                    self.bulletConfig.velocityX = 600;
+                    self.bulletConfig.angle = 90;
+                    self.ship.body.checkCollision.right = true;
+                    break;
+            }
+
         }
-    }
 
-    if(!y){
-        switch(direction){
-            case 'down':
-                y = 50;
-                break;
-            case 'up':
-                y = game.height - 50;
-                break;
-            case 'left':
-            case 'right':
-                y = game.world.centerY;
-                break;
+        this.fire = function (){
+
+            self.fireSound = game.add.audio(config.fireSound);
+
+            if(config.fireButton)
+                self.cursors.fire = config.fireButton;
+
         }
-    }
 
-    this.fireSound = game.add.audio(fireSound);
+        this.bullets = function (){
 
-    this.fireButton = fireButton;
-    this.cursors = cursors;
-    this.input = this.cursors;
+            self.bulletConfig = {
+                time: null,
+                startX: null,
+                startY: null,
+                velocity: null,
+                angle: null
+            };
 
-    this.id = id;
+            self.bullets = null;
+            self.bullets = game.add.physicsGroup();
+            self.bullets.createMultiple(32, config.bulletImage, false);
+            self.bullets.setAll('checkWorldBounds', true);
+            self.bullets.setAll('outOfBoundsKill', true);
+            self.bullets.setAll('angle', self.bulletConfig.angle);
 
-    this.bulletConfig = {
-        time: null,
-        startX: null,
-        startY: null,
-        velocity: null,
-        angle: null
-    };
+        }
 
-    this.direction = direction;
-    this.velocity = 600;
+        this.variables = function (){
 
-    this.ship = game.add.sprite(x, y, image);
-    game.physics.arcade.enable(this.ship);
-    this.ship.body.collideWorldBounds = true;
+            self.alive = true;
+            self.id = config.id;
+            self.velocity = 600;
 
-    switch(direction){
-        case 'down':
-            this.ship.angle = 180;
-            this.bulletConfig.startX = -this.ship.width / 4;
-            this.bulletConfig.startY = -this.ship.height / 2;
-            this.bulletConfig.velocityY = 600;
-            this.bulletConfig.angle = 0;
-            this.ship.body.checkCollision.down = true;
-            break;
-        case 'up':
-            this.ship.angle = 0;
-            this.bulletConfig.startX = this.ship.width / 4;
-            this.bulletConfig.startY = -this.ship.height / 2;
-            this.bulletConfig.velocityY = -600;
-            this.bulletConfig.angle = 0;
-            this.ship.body.checkCollision.up = true;
-            break;
-        case 'left':
-            this.ship.angle = 270;
-            this.bulletConfig.startX = -this.ship.width / 2;
-            this.bulletConfig.startY = -this.ship.height / 4;
-            this.bulletConfig.velocityX = -600;
-            this.bulletConfig.angle = 270;
-            this.ship.body.checkCollision.left = true;
-            break;
-        case 'right':
-            this.ship.angle = 90;
-            this.bulletConfig.startX = this.ship.width / 2;
-            this.bulletConfig.startY = this.ship.height / 4;
-            this.bulletConfig.velocityX = 600;
-            this.bulletConfig.angle = 90;
-            this.ship.body.checkCollision.right = true;
-            break;
-    }
+        }
 
-    this.bullets = null;
-    this.bullets = game.add.physicsGroup();
-    this.bullets.createMultiple(32, bulletImage, false);
-    this.bullets.setAll('checkWorldBounds', true);
-    this.bullets.setAll('outOfBoundsKill', true);
-    this.bullets.setAll('angle', this.bulletConfig.angle);
+        this.ship = function (){
+
+            self.ship = game.add.sprite(config.x, config.y, config.image);
+            game.physics.arcade.enable(self.ship);
+            self.ship.body.collideWorldBounds = true;
+
+        }
+
+        this.cursors = function (){
+
+            self.cursors = config.cursors;
+            self.input = {};
+            self.cursorState = {};
+
+        }
+
+        this.defaultConfig = function (){
+
+            if(!config.direction)
+                config.direction = "up";
+
+            if(!config.id)
+                config.id = null;
+
+            if(!config.x){
+                switch(config.direction){
+                    case 'down':
+                    case 'up':
+                        config.x = game.world.centerX;
+                        break;
+                    case 'left':
+                        config.x = game.width - 50;
+                        break;
+                    case 'right':
+                        config.x = 50;
+                        break;
+                }
+            }
+
+            if(!config.y){
+                switch(config.direction){
+                    case 'down':
+                        config.y = 50;
+                        break;
+                    case 'up':
+                        config.y = game.height - 50;
+                        break;
+                    case 'left':
+                    case 'right':
+                        config.y = game.world.centerY;
+                        break;
+                }
+            }
+
+        }
+
+        this.defaultConfig();
+        this.variables();
+        this.bullets();
+        this.ship();
+        this.cursors();
+        this.fire();
+        this.direction();
+
+    })();
 
     this.fire = function() {
 
-        if (game.time.time > self.bulletConfig.time)
-        {
+        if (!self.alive)
+            return;
+
+        if (game.time.time > self.bulletConfig.time){
+
             var bullet = self.bullets.getFirstExists(false);
 
-            if (bullet)
-            {
+            if (bullet){
+
                 bullet.reset(self.ship.x + self.bulletConfig.startX, self.ship.y + self.bulletConfig.startY);
                 
                 if(self.bulletConfig.velocityY)
@@ -113,37 +180,70 @@ function player(image, bulletImage, fireSound, direction, cursors, fireButton, i
                     bullet.body.velocity.x = self.bulletConfig.velocityX;
 
                 self.bulletConfig.time = game.time.time + 100;
-                self.fireSound.play();
+
+                if(self.fireSound)
+                    self.fireSound.play();
             }
         }
 
     }
 
+    this.kill = function (){
+        self.alive = false;
+        self.ship.kill();
+    }
+
     this.update = function(eurecaServer, id) {
 
-        if(eurecaServer){
+        if(eurecaServer)
+            self.updateOnline(eurecaServer, id);
+        else
+            self.updateOffline();
 
-            var inputChanged = (
-                this.cursor.left != this.input.left ||
-                this.cursor.right != this.input.right ||
-                this.cursor.up != this.input.up ||
-                this.cursor.fire != this.input.fire
-            );
+    }
+
+    this.updateOnline = function(eurecaServer, id) {
+
+        var inputChanged = (
+            self.cursorState.left != self.input.left ||
+            self.cursorState.right != self.input.right ||
+            self.cursorState.fire != self.input.fire
+        );
             
             
-            if (inputChanged)
-            {
+        if (inputChanged){
 
-                if (this.id == id)
-                {
-                    this.input.x = this.tank.x;
-                    this.input.y = this.tank.y;
+            if (self.id == id){
+
+                self.input.x = self.ship.body.velocity.x;
+                self.input.y = self.ship.body.velocity.y;
                     
-                    eurecaServer.handleKeys(this.input);
-                }
+                eurecaServer.handleKeys(self.input);
             }
-
         }
+
+        self.ship.body.velocity.x = 0;
+        self.ship.body.velocity.y = 0;
+
+        if (self.cursorState.left && (self.direction == "up" || self.direction == "down"))
+            self.ship.body.velocity.x = -self.velocity;
+        else if (self.cursorState.left && self.direction == "left")
+            self.ship.body.velocity.y = self.velocity;
+        else if (self.cursorState.left && self.direction == "right")
+            self.ship.body.velocity.y = -self.velocity;
+        else if (self.cursorState.right && (self.direction == "up" || self.direction == "down"))
+            self.ship.body.velocity.x = self.velocity;
+        else if (self.cursorState.right && self.direction == "left")
+            self.ship.body.velocity.y = -self.velocity;
+        else if (self.cursorState.right && self.direction == "right")
+            self.ship.body.velocity.y = self.velocity;
+
+        if (self.cursorState.fire)
+            self.fire();
+
+    }
+
+    this.updateOffline = function (){
 
         self.ship.body.velocity.x = 0;
         self.ship.body.velocity.y = 0;
@@ -161,9 +261,17 @@ function player(image, bulletImage, fireSound, direction, cursors, fireButton, i
         else if (self.cursors.right.isDown && self.direction == "right")
             self.ship.body.velocity.y = self.velocity;
 
-        if (self.fireButton.isDown)
+        if (self.cursors.fire && self.cursors.fire.isDown)
             self.fire();
 
+    }
+
+    this.updateInput = function() {
+        self.input.left = self.cursors.left.isDown;
+        self.input.right = self.cursors.right.isDown;
+        
+        if(self.cursors.fire)
+            self.input.fire = self.cursors.fire.isDown;
     }
 
 }

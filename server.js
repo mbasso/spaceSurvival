@@ -25,21 +25,10 @@ eurecaServer.onConnect(function (conn) {
 eurecaServer.onDisconnect(function (conn) {    
     //console.log('Client disconnected ', conn.id);
 	var removeId = clients[conn.id].id;
-	
 	delete clients[conn.id];
-	
 	killPlayer(conn.id);
 
 });
-
-/*
-
-	createRoom(1, nome);
-	clients[conn.id].room = nome;
-	----
-	deleteRoom(nome);
-
-*/
 
 var createRoom = function (id, name) {
 	rooms[name] = new tools.room(id, name);
@@ -91,8 +80,7 @@ eurecaServer.exports.handleKeys = function (keys) {
 	{
 		var remote = clients[c].remote;
 		remote.updateState(updatedClient.id, keys);
-		
-		clients[c].lastState = keys;
+		//clients[c].lastState = keys;
 	}
 }
 

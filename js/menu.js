@@ -30,9 +30,9 @@ var menu = {
 			game.state.start('SinglePlayer');
 		});
 
-		this.texts.multiplayerPvp = this.setText('Coop Online', function(){
+		/*this.texts.multiplayerPvp = this.setText('Coop Online', function(){
 			game.state.start('OnlineCoop');
-		});
+		});*/
 
 		this.texts.multiplayerPvp = this.setText('Multiplayer PVP', function(){
 			game.state.start('MultiPlayerPvp');
@@ -44,6 +44,10 @@ var menu = {
 
 		this.texts.help = this.setText('Help', function(){
 			game.state.start('Help');
+		});
+
+		this.texts.help = this.setText('Credits', function(){
+			game.state.start('Credits');
 		});
 
 		game.onPause.add(onGamePaused, this);

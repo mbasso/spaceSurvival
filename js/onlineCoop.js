@@ -4,6 +4,10 @@ var onlineCoop = {
 	ready: null,
 	players: [],
 	id: null,
+	score: null,
+	timer: null,
+	gameOver: null,
+	enemies: null,
 	texts:{
 		back: null,
 		help: null
@@ -44,14 +48,17 @@ var onlineCoop = {
 			if (id == onlineCoop.id)
 				return;
 
-			onlineCoop.players[id] = new player('ship2', 
-		    	'bullet', 
-		    	'blaster', 
-		    	'up', 
-		    	game.input.keyboard.createCursorKeys(), 
-		    	game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR),
-		    	this.id
-		    );
+		    onlineCoop.players[id] = new player ({
+		    	image: 'ship2',
+		    	bulletImage: 'bullet',
+		    	fireSound: 'blaster',
+		    	cursors: {
+		    		left: { isDown: false},
+					right: { isDown: false}
+		    	},
+		    	fireButton: { isDown: false},
+		    	id: id
+		    });
 
 		    onlineCoop.players[id].ship.angle = 270;
 		}
@@ -59,9 +66,9 @@ var onlineCoop = {
 		this.eurecaClient.exports.updateState = function(id, state)
 		{
 			if (onlineCoop.players[id])  {
-				onlineCoop.players[id].cursor = state;
-				onlineCoop.players[id].ship.x = state.x;
-				onlineCoop.players[id].ship.y = state.y;
+				onlineCoop.players[id].cursorState = state;
+				onlineCoop.players[id].ship.body.velocity.x = state.x;
+				onlineCoop.players[id].ship.body.velocity.y = state.y;
 				onlineCoop.players[id].update(onlineCoop.eurecaServer);
 			}
 		}
@@ -75,14 +82,41 @@ var onlineCoop = {
 		if (!this.ready)
 			return;
 
-		this.players[this.id].update();
+		this.players[this.id].updateInput();
 
 		for (var i in this.players){
+
+			if (!this.players[i])
+				continue;
+
+			var curBullets = this.players[i].bullets;
+			var curShip = this.players[i].ship;
+
+			for (var j in this.players){
+
+				if (!this.players[j])
+					continue;
+
+				if (j!=i){
+					var targetShip = this.players[j].ship;
+					//game.physics.arcade.overlap(curBullets, targetShip, bulletHitPlayer, null, this);
+				}
+
+				if (this.players[j].alive)
+					this.players[j].update(onlineCoop.eurecaServer);
+
+			}
+
+	    }
+
+		this.players[this.id].update(this.eurecaServer, this.id);
+
+		/*for (var i in this.players){
 		    game.physics.arcade.collide(this.players[i].bullets, this.enemies.group, this.killEnemy, null, this);
-		    //game.physics.arcade.collide(this.enemies.bullets, this.players[i].ship, this.onGameOver, null, this);
+		    game.physics.arcade.collide(this.enemies.bullets, this.players[i].ship, this.onGameOver, null, this);
 		}
 
-	    this.enemies.update();
+	    this.enemies.update();*/
 
 	},
 	onClientReady: function(){
@@ -93,7 +127,7 @@ var onlineCoop = {
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 	    game.add.tileSprite(0, 0, game.world.width, game.world.height, 'starfield');
 
-	    this.enemies = new enemiesGroup(
+	    /*this.enemies = new enemiesGroup(
 	    	['ufo', 'wabbit' , 'yellow_ball', 'tomato', 'phaser-ship', 'phaser-dude'],
 	    	'particle_small',
 	    	'alien_death1',
@@ -101,16 +135,16 @@ var onlineCoop = {
 	    	200,
 	    	0,
 	    	700
-	    );
+	    );*/
 
-	    this.players[this.id] = new player('ship', 
-	    	'bullet', 
-	    	'blaster', 
-	    	'up', 
-	    	game.input.keyboard.createCursorKeys(), 
-	    	game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR),
-	    	this.id
-	    );
+	    this.players[this.id] = new player ({
+	    	image: 'ship',
+	    	bulletImage: 'bullet',
+	    	fireSound: 'blaster',
+		   	cursors: game.input.keyboard.createCursorKeys(),
+		    fireButton: game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR),
+	    	id: this.id
+	    });
 
 	    this.texts.score = game.add.bitmapText(10, 10, 'carrier_command','Score: ' + this.score, 10);
 	    this.texts.timer = game.add.bitmapText(game.world.centerX, 10, 'carrier_command', '00:00', 10);

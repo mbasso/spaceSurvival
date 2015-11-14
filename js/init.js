@@ -47,16 +47,18 @@ window.onload = function() {
     
     game.state.add('Menu', menu);
     game.state.add('SinglePlayer', singlePlayer);
-    game.state.add('OnlineCoop', onlineCoop);
+    //game.state.add('OnlineCoop', onlineCoop);
     game.state.add('MultiPlayerPvp', multiPlayerPvp);
     game.state.add('Help', help);
+    game.state.add('Credits', credits);
     game.state.onStateChange.add(onStateChange);
 
     delete gameArea;
     delete menu;
     delete singlePlayer;
-    delete onlineCoop;
+    //delete onlineCoop;
     delete multiPlayerPvp;
     delete help;
+    delete credits;
 
 };

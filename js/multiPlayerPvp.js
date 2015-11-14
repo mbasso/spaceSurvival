@@ -3,7 +3,7 @@ var multiPlayerPvp = {
 	player2: null,
 	score1: 0,
 	score2: 0,
-	heart: null,
+	//heart: null,
 	timer: null,
 	gameOver: null,
 	lives: {
@@ -14,18 +14,13 @@ var multiPlayerPvp = {
 		player_death: null
 	},
 	texts: {
-		lives: null,
-	    score: null,
+	    players: null,
 	    menu: null,
 	    timer: null
 	},
 	button: {
 	    restart: null,
 	    pause: null
-	},
-	player2_cursor: {
-	    left: null,
-	    right: null
 	},
 	preload: function(){
 
@@ -56,8 +51,6 @@ var multiPlayerPvp = {
 		//this.heart = game.add.image(0,0, 'heart');
 
 		this.gameOver = false;
-		this.player2_cursor.left = game.input.keyboard.addKey(Phaser.KeyCode.A);
-		this.player2_cursor.right = game.input.keyboard.addKey(Phaser.KeyCode.D);
 
 		game.physics.startSystem(Phaser.Physics.ARCADE);
 	    game.add.tileSprite(0, 0, game.world.width, game.world.height, 'starfield');
@@ -68,25 +61,27 @@ var multiPlayerPvp = {
 	    this.audio.player_death = game.add.audio('player_death');
 	    this.audio.bulletCollision = game.add.audio('bulletCollision');
 
-	    this.player1 = new player('ship', 
-	    	'bullet1', 
-	    	'blaster', 
-	    	'up', 
-	    	game.input.keyboard.createCursorKeys(), 
-	    	game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
-	    );
+	    this.player1 = new player ({
+	    	image: 'ship',
+	    	bulletImage: 'bullet1',
+	    	fireSound: 'blaster',
+	    	cursors: game.input.keyboard.createCursorKeys(),
+	    	fireButton: game.input.keyboard.addKey(Phaser.Keyboard.SPACEBAR)
+	    });
 
-	    this.player2 = new player('ufo', 
-	    	'bullet2', 
-	    	'blaster', 
-	    	'down', 
-	    	this.player2_cursor, 
-	    	game.input.keyboard.addKey(Phaser.Keyboard.W)
-	    );
+	    this.player2 = new player ({
+	    	image: 'ufo',
+	    	bulletImage: 'bullet2',
+	    	fireSound: 'blaster',
+	    	direction: 'down',
+	    	cursors: {
+	    		left: game.input.keyboard.addKey(Phaser.KeyCode.A),
+	    		right: game.input.keyboard.addKey(Phaser.KeyCode.D)
+	    	},
+	    	fireButton: game.input.keyboard.addKey(Phaser.Keyboard.W)
+	    });
 
 	    this.player2.ship.angle = 0;
-	    
-	    this.texts.score = game.add.bitmapText(10, 10, 'carrier_command', 'P1 ' + this.score1 + ', P2 ' + this.score2, 10);
 
 	    this.texts.menu = game.add.bitmapText(game.world.width - 10, 10, 'carrier_command','Menu', 10);
 	    this.texts.menu.anchor.x = 1;
@@ -95,8 +90,8 @@ var multiPlayerPvp = {
 			game.state.start('Menu');
 		}, this);
 
-		this.texts.lives = game.add.bitmapText(game.world.leftX, 50, 'carrier_command', 'LIVES1 3, LIVES2 3', 10);
-	    this.texts.lives.anchor.set(0.0);
+		this.texts.players = game.add.bitmapText(10, 10, 'carrier_command', 'Player 1\n\n  Score: ' + this.score1 + '\n\n  Lives: ' + this.lives.player1 + '\n\n\nPlayer 2\n\n  Score: ' + this.score2 + '\n\n  Lives: ' + this.lives.player2, 10);
+	    this.texts.players.anchor.set(0.0);
 
 	    this.texts.timer = game.add.bitmapText(game.world.centerX, 10, 'carrier_command', '00:00', 10);
 	    this.texts.timer.anchor.set(0.5);
@@ -116,12 +111,15 @@ var multiPlayerPvp = {
 	},
 	render: function(){
 		this.texts.timer.setText(this.timer.getFormattedTime());
-		this.texts.lives.setText('LIVES1 ' + this.lives.player1 + ', LIVES2 ' + this.lives.player2);
+		this.texts.players.setText('Player 1\n\n  Score: ' + this.score1 + '\n\n  Lives: ' + this.lives.player1 + '\n\n\nPlayer 2\n\n  Score: ' + this.score2 + '\n\n  Lives: ' + this.lives.player2);
 	},
 	update: function(){
 
-		/*if (this.button.restart.isDown)
-	        game.state.restart();*/
+		if (this.button.restart.isDown){
+			this.score1 = 0;
+			this.score2 = 0;
+	        game.state.restart();
+		}
 
 	    if (this.button.pause.isDown)
 	        game.paused = true;
@@ -171,5 +169,6 @@ var multiPlayerPvp = {
         game.paused = true;
         this.gameOver = true;
 
-	}
+	},
+
 };
