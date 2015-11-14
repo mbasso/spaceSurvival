@@ -10,6 +10,13 @@ Two game modes are avaible at the moment:
 - Singleplayer, fight against enemies from space
 - Local multiplayer, fight against a friend
 
+Online coop is in development.
+This feature is design with:
+- [Node.js](https://nodejs.org)
+- [Eureca.io](http://eureca.io/)
+- [Engine.io](https://github.com/socketio/engine.io)
+- [Express](http://expressjs.com/).
+
 ##Authors
 **Matteo Basso**
 - [github/mbasso](https://github.com/mbasso)
