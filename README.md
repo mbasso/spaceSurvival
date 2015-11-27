@@ -21,6 +21,7 @@ At the moment this feature is design with:
 **Matteo Basso**
 - [github/mbasso](https://github.com/mbasso)
 - [mbasso96@gmail.com](mailto:mbasso96@gmail.com)
+- [@Teo_Basso](https://twitter.com/Teo_Basso)
 
 **Federico Bottoni**
 - [github/federicobottoni](https://github.com/federicobottoni)
