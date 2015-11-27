@@ -1,7 +1,5 @@
 # Space Survival
 
-##This project is incomplete. We are working on that
-
 ![alt tag](https://github.com/mbasso/spaceSurvival/blob/master/screenshot.jpg)
 
 ####>>>>>[Try it here!](http://spacesurvival.teamturkeys.com/)<<<<<
@@ -13,7 +11,7 @@ Two game modes are avaible at the moment:
 - Local multiplayer, fight against a friend
 
 Online coop is in development.
-This feature is design with:
+At the moment this feature is design with:
 - [Node.js](https://nodejs.org)
 - [Eureca.io](http://eureca.io/)
 - [Engine.io](https://github.com/socketio/engine.io)
