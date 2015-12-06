@@ -2,8 +2,6 @@
 
 ![alt tag](https://github.com/mbasso/spaceSurvival/blob/master/screenshot.jpg)
 
-####>>>>>[Try it here!](http://spacesurvival.teamturkeys.com/)<<<<<
-
 Space Survival is a simple, free, open source game designed with [Phaser.io](http://phaser.io/).
 
 Two game modes are avaible at the moment:
